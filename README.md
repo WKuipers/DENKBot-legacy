@@ -13,7 +13,7 @@ Change the credentials in examplelogin to the credentials of the bot, and rename
 In order to store responses the program will try to write to a file called `responses.p`
 
 ##Usage
-Run Discord.py. It will print a message when it has succesfully logged in.
+Run DiscordBot.py. It will print a message when it has succesfully logged in.
 
 ##Commands
 `!add:trigger:response` adds a word to the database, and what to respond with when someone uses that word.
