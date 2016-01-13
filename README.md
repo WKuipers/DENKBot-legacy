@@ -17,7 +17,9 @@ Run Discord.py. It will print a message when it has succesfully logged in.
 
 ##Commands
 `!add:trigger:response` adds a word to the database, and what to respond with when someone uses that word.
+
 `!del:trigger` deletes a trigger from the database.
+
 `roll:n` generates a random number from 0 to n.
 
 ##Limitations
