@@ -31,6 +31,7 @@ def delete_this(memes, message, delete):
     delete[message] = delete[message] + 1
     if delete[message] >= 3:
         del delete[message]
+        del memes[message]
         return 'Deleted ' + message
     else:
         return 'There are now {} votes to delete {}'.format(delete[message],message)
