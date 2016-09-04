@@ -11,7 +11,9 @@ def add_meme(memes, message):
         return ('Command not formatted correctly!\n'
                 'The correct syntax is !addmeme trigger|response')
     if len(key) < 4:
-        return ('That trigger is too small')
+        return 'That trigger is too small.'
+    if len(key) > 64:
+        return 'That trigger is too large.'
     if key not in memes:
         memes[key] = value
 
@@ -19,6 +21,19 @@ def add_meme(memes, message):
 def get_meme(memes, message):
     return '\n'.join(map(memes.get,filter(lambda x: x in message, memes.keys())))
 
+
+def delete_this(memes, message, delete):
+    message = message[12:]
+    if message not in memes:
+        return 'One can not delete what is not there.'
+    if message not in delete:
+        delete[message] = 0
+    delete[message] = delete[message] + 1
+    if delete[message] >= 3:
+        del delete[message]
+        return 'Deleted ' + message
+    else:
+        return 'There are now {} votes to delete {}'.format(delete[message],message)
 
 async def store_memes(memes):
     while True:
@@ -36,7 +51,7 @@ try:
     memes = json.load(open('memes.json'))
 except FileNotFoundError:
     memes = {}
-
+delete = {}
 client = discord.Client()
 
 @client.event
@@ -49,6 +64,8 @@ async def on_message(message):
         return
     elif message.content.startswith('!addmeme '):
         response = add_meme(memes, message.content)
+    elif message.content.startswith('!deletethis '):
+        response = delete_this(memes, message.content, delete)
     else:
         response = get_meme(memes, message.content)
 
