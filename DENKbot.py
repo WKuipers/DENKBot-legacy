@@ -10,6 +10,7 @@ def add_meme(memes, message):
     except ValueError:
         return ('Command not formatted correctly!\n'
                 'The correct syntax is !addmeme trigger|response')
+    key = key.lower()
     if len(key) < 4:
         return 'That trigger is too small.'
     if len(key) > 64:
@@ -19,7 +20,7 @@ def add_meme(memes, message):
 
 
 def get_meme(memes, message):
-    return '\n'.join(map(memes.get,filter(lambda x: x in message, memes.keys())))
+    return '\n'.join(map(memes.get,filter(lambda x: x in message.lowercase(), memes.keys())))
 
 
 def delete_this(memes, message, delete):
@@ -35,6 +36,7 @@ def delete_this(memes, message, delete):
         return 'Deleted ' + message
     else:
         return 'There are now {} votes to delete {}'.format(delete[message],message)
+
 
 async def store_memes(memes):
     while True:
@@ -55,9 +57,11 @@ except FileNotFoundError:
 delete = {}
 client = discord.Client()
 
+
 @client.event
 async def on_ready():
     print('Logged in as ' + client.user.name)
+
 
 @client.event
 async def on_message(message):
@@ -72,6 +76,7 @@ async def on_message(message):
 
     if response:
         await client.send_message(message.channel, response)
+
 
 loop = asyncio.get_event_loop()
 loop.create_task(store_memes(memes))
