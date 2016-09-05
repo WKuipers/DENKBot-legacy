@@ -3,14 +3,17 @@ import asyncio
 
 
 class MemesModule:
-    def __init__(self, client):
+    def __init__(self, client, server):
+        self.client = client
+        self.server = server
         try:
-            self.memes = json.load(open('memes.json'))
+            fp = open('_'.join([str(self.server),'memes.json']))
+            self.memes = json.load(fp)
         except FileNotFoundError:
             self.memes = {}
         self.delete = {}
-        self.client = client
-        self.client.event(self.on_message)
+        self.events = [self.store_memes]
+
 
     def add_meme(self, message):
         try:
@@ -51,12 +54,14 @@ class MemesModule:
     async def store_memes(self):
         while True:
             await asyncio.sleep(5)
-            with open('memes.json', 'w') as f:
-                json.dump(self.memes, f)
+            with open('_'.join([str(self.server),'memes.json']),'w') as fp:
+                json.dump(self.memes, fp)
 
 
     async def on_message(self, message):
         if message.author.id == self.client.user.id:
+            return
+        elif message.server != self.server:
             return
         elif message.content.startswith('!addmeme '):
             response = self.add_meme(message.content)
@@ -64,6 +69,5 @@ class MemesModule:
             response = self.delete_this(message.content)
         else:
             response = self.get_meme(message.content)
-
         if response:
             await self.client.send_message(message.channel, response)
