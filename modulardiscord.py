@@ -27,7 +27,7 @@ class ModularDiscordClient():
         for module in self.modules[str(server)]:
             if module.name == module_name:
                 return True
-        return false
+        return False
 
     def register(self, message):
         module_name = message.content[10:]
