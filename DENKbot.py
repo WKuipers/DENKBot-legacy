@@ -20,7 +20,7 @@ def add_meme(memes, message):
 
 
 def get_meme(memes, message):
-    return '\n'.join(map(memes.get,filter(lambda x: x in message.lower()), memes.keys())))
+    return '\n'.join(map(memes.get,filter(lambda x: x in message.lower(), memes.keys())))
 
 
 def delete_this(memes, message, delete):
