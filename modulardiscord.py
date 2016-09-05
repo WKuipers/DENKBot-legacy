@@ -32,7 +32,7 @@ class ModularDiscordClient():
     def register(self, message):
         module_name = message.content[10:]
         if (
-                module_name == 'memes'
+                module_name == 'Memes'
                 and not self.module_loaded(module_name, message.server)
             ):
             module = memes.MemesModule(self.client, message.server)
