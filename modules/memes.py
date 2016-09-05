@@ -53,7 +53,7 @@ class MemesModule:
 
     async def store_memes(self):
         while True:
-            await asyncio.sleep(5)
+            await asyncio.sleep(360)
             with open('_'.join([str(self.server),'memes.json']),'w') as fp:
                 json.dump(self.memes, fp)
 
