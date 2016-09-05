@@ -1,7 +1,6 @@
 import discord
 import asyncio
 import os
-import json
 
 import modules.memes as memes
 
