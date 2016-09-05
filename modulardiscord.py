@@ -19,11 +19,22 @@ class ModularDiscordClient():
             self.modules[str(server)].append(module)
         for event in module.events:
             self.client.loop.create_task(event())
-
+    
+    
+    def module_loaded(self, module_name, server):
+        if str(server) not in self.modules:
+            return False
+        for module in self.modules[str(server)]:
+            if module.name == module_name:
+                return True
+        return false
 
     def register(self, message):
         module_name = message.content[10:]
-        if module_name == 'memes':
+        if (
+                module_name == 'memes'
+                and not self.module_loaded(module_name, message.server)
+            ):
             module = memes.MemesModule(self.client, message.server)
             self.register_module(module, message.server)
 

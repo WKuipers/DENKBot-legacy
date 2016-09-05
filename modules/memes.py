@@ -4,6 +4,7 @@ import asyncio
 
 class MemesModule:
     def __init__(self, client, server):
+        self.name = 'Memes'
         self.client = client
         self.server = server
         try:
