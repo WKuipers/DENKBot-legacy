@@ -18,7 +18,7 @@ class MemesModule:
 
     def add_meme(self, message):
         try:
-            key, value = message[9:].split('|')
+            key, value = message.content[9:].split('|')
         except ValueError:
             return ('Command not formatted correctly!\n'
                     'The correct syntax is !addmeme trigger|response')
@@ -32,24 +32,26 @@ class MemesModule:
 
 
     def get_meme(self, message):
-        hits = filter(lambda x: x in message.lower(), self.memes.keys())
+        trigger = message.content
+        hits = filter(lambda x: x in trigger.lower(), self.memes.keys())
         return '\n'.join(map(self.memes.get, hits))
 
 
     def delete_this(self, message):
-        message = message[12:]
-        if message not in self.memes:
+        trigger = message.content[12:]
+        if trigger not in self.memes:
             return 'One can not delete what is not there.'
-        if message not in self.delete:
-            self.delete[message] = 0
-        self.delete[message] = self.delete[message] + 1
-        if self.delete[message] >= 3:
-            del self.delete[message]
-            del self.memes[message]
-            return 'Deleted ' + message
+        if trigger not in self.delete:
+            self.delete[trigger] = set([message.author.id])
+        else:
+            self.delete[trigger].add(message.author.id)
+        if len(self.delete[trigger]) >= 3:
+            del self.delete[trigger]
+            del self.memes[trigger]
+            return 'Deleted ' + trigger
         else:
             return ('There are now {} votes to delete {}'
-                    .format(self.delete[message],message))
+                    .format(len(self.delete[trigger]), trigger))
 
 
     async def store_memes(self):
@@ -65,10 +67,10 @@ class MemesModule:
         elif message.server != self.server:
             return
         elif message.content.startswith('!addmeme '):
-            response = self.add_meme(message.content)
+            response = self.add_meme(message)
         elif message.content.startswith('!deletethis '):
-            response = self.delete_this(message.content)
+            response = self.delete_this(message)
         else:
-            response = self.get_meme(message.content)
+            response = self.get_meme(message)
         if response:
             await self.client.send_message(message.channel, response)
