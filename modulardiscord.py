@@ -2,6 +2,7 @@ import discord
 import asyncio
 
 import modules.memes as memes
+import modules.twitch as twitch
 
 class ModularDiscordClient():
    
@@ -31,11 +32,13 @@ class ModularDiscordClient():
 
     def register(self, message):
         module_name = message.content[10:]
-        if (
-                module_name == 'Memes'
-                and not self.module_loaded(module_name, message.server)
-            ):
+        if self.module_loaded(module_name, message.server):
+            return
+        if module_name == 'Memes':
             module = memes.MemesModule(self.client, message.server)
+            self.register_module(module, message.server)
+        elif module_name == 'Twitch':
+            module = twitch.TwitchModule(self.client, message.channel)
             self.register_module(module, message.server)
 
     async def on_ready(self):
