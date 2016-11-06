@@ -8,13 +8,12 @@ class MemesModule:
         self.client = client
         self.server = server
         try:
-            fp = open('_'.join([str(self.server),'memes.json']))
+            fp = open('_'.join([str(self.server), 'memes.json']))
             self.memes = json.load(fp)
         except FileNotFoundError:
             self.memes = {}
         self.delete = {}
         self.events = [self.store_memes]
-
 
     def add_meme(self, message):
         try:
@@ -30,12 +29,10 @@ class MemesModule:
         if key not in self.memes:
             self.memes[key] = value
 
-
     def get_meme(self, message):
         trigger = message.content
         hits = filter(lambda x: x in trigger.lower(), self.memes.keys())
         return '\n'.join(map(self.memes.get, hits))
-
 
     def delete_this(self, message):
         trigger = message.content[12:]
@@ -53,13 +50,11 @@ class MemesModule:
             return ('There are now {} votes to delete {}'
                     .format(len(self.delete[trigger]), trigger))
 
-
     async def store_memes(self):
         while True:
             await asyncio.sleep(360)
-            with open('_'.join([str(self.server),'memes.json']),'w') as fp:
+            with open('_'.join([str(self.server), 'memes.json']), 'w') as fp:
                 json.dump(self.memes, fp)
-
 
     async def on_message(self, message):
         if message.author.id == self.client.user.id:
@@ -74,3 +69,6 @@ class MemesModule:
             response = self.get_meme(message)
         if response:
             await self.client.send_message(message.channel, response)
+
+
+module = MemesModule
