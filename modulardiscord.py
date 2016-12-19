@@ -33,6 +33,7 @@ class ModularDiscordClient():
                 module_class = import_module(module_path).module
                 module = module_class(self.client, server)
                 self.register_module(module, server)
+                print('Registered {} for {}'.format(module_name, server.name))
                 return module_name
             except ImportError:
                 return None
