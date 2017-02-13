@@ -17,5 +17,4 @@ Run DENKBot.py. It will print a message when it has succesfully logged in.
 `!addmeme trigger|response` adds a word to the database, and what to respond with when someone uses that word.
 
 ##Issues
-Triggers can not be deleted
 It will attempt to find every key in every message which may be slow with lots of keys.
